@@ -14,9 +14,27 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #fbf3ef;
+    margin-bottom: 60px;
 }
 
 img {
-    border: 5px solid #FFD700;
+    border: 2px solid #0088e0;
+    margin: 40px auto;
+}
+
+.bg-background-lightblue {
+    background-color: #add8e6;
+    transition:background-color ease-in 1s;
+}
+
+.menu-item {
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color ease-out 0.5s;
+}
+
+.menu-item:hover {
+    background-color: #acc7d5;
+    transition: background-color ease-out 0.5s;
 }
