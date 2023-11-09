@@ -5,8 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Añade el servicio de ReservasService al contenedor.
+// Se añaden los servicios al contenedor.
 builder.Services.AddScoped<ReservasService>();
+builder.Services.AddScoped<ProfesionalesService>();
 
 var app = builder.Build();
 
