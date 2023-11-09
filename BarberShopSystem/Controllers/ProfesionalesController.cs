@@ -1,14 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BarberShopSystem.Models;
+using BarberShopSystem.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarberShopSystem.Controllers
 {
     public class ProfesionalesController : Controller
     {
+        // Inyección de dependencia del servicio de profesionales.
+        private readonly ProfesionalesService _profesionalesService;
+
+        // Constructor para inyectar el servicio en el controlador.
+        public ProfesionalesController(ProfesionalesService profesionalesService)
+        {
+            _profesionalesService = profesionalesService;
+        }
         // GET: ProfesionalesController
         public ActionResult Index()
         {
-            return View();
+            // Se utiliza el servicio para obtener la lista de profesionales.
+            List<Profesional> profesionales = _profesionalesService.ObtenerListaDeProfesionales();
+            return View(profesionales);
         }
 
         // GET: ProfesionalesController/Details/5

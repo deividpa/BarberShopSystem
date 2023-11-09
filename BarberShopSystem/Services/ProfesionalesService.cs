@@ -7,16 +7,16 @@ namespace BarberShopSystem.Services
     public class ProfesionalesService
     {
         // Método para obtener la lista de reservas
-        public List<Reserva> ObtenerListaDeReservas()
+        public List<Profesional> ObtenerListaDeProfesionales()
         {
             // Simulación de obtención de datos (actualmente no se extrae info de la BD)
-            List<Reserva> reservas = new List<Reserva>
+            List<Profesional> profesionales = new List<Profesional>
             {
-                new Reserva { Id = 1, Fecha = DateTime.Now, ProfesionalId = 1 },
-                new Reserva { Id = 2, Fecha = DateTime.Now.AddDays(1), ProfesionalId = 2 },
+                new Profesional { Id = 1, Nombre = "Marisol Pérez", Especialidad = "Peluquería" },
+                new Profesional { Id = 2, Nombre = "Danilo Cifuentes" , Especialidad = "Barbería" },
             };
 
-            return reservas;
+            return profesionales;
         }
     }
 }
