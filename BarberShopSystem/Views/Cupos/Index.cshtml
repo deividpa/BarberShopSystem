@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BarberShopSystem.Models.Profesional>
+﻿@model IEnumerable<BarberShopSystem.Models.Cupo>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,13 +16,19 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.HoraInicio)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Correo)
+                @Html.DisplayNameFor(model => model.HoraFin)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumeroTelefono)
+                @Html.DisplayNameFor(model => model.EstadoCupo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiciosDisponibles)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfesionalId)
             </th>
             <th></th>
         </tr>
@@ -34,13 +40,19 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
+                @Html.DisplayFor(modelItem => item.HoraInicio)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Correo)
+                @Html.DisplayFor(modelItem => item.HoraFin)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NumeroTelefono)
+                @Html.DisplayFor(modelItem => item.EstadoCupo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiciosDisponibles)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProfesionalId)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

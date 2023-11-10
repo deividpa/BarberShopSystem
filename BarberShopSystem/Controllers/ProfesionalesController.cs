@@ -38,11 +38,17 @@ namespace BarberShopSystem.Controllers
         // POST: ProfesionalesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Profesional nuevoProfesional)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    // Utiliza el servicio para agregar el nuevo profesional
+                    _profesionalesService.AgregarProfesional(nuevoProfesional);
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(nuevoProfesional);
             }
             catch
             {
