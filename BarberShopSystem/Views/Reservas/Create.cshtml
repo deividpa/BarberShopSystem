@@ -1,0 +1,83 @@
+﻿@model BarberShopSystem.Models.Reserva
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h1 class="text-center">Crear Reservas</h1>
+            <hr />
+
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Fecha" class="form-label">Fecha de reserva:</label>
+                    <input asp-for="Fecha" class="form-control" />
+                    <span asp-validation-for="Fecha" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ProfesionalId" class="form-label">Numero de profesional:</label>
+                    <input asp-for="ProfesionalId" class="form-control" />
+                    <span asp-validation-for="ProfesionalId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CupoId" class="form-label">Numero de cupo:</label>
+                    <input asp-for="CupoId" class="form-control" />
+                    <span asp-validation-for="CupoId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ServicioId" class="form-label">Numero servicio:</label>
+                    <input asp-for="ServicioId" class="form-control" />
+                    <span asp-validation-for="ServicioId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ClienteId" class="form-label">Numero cliente:</label>
+                    <input asp-for="ClienteId" class="form-control" />
+                    <span asp-validation-for="ClienteId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input class="form-check-input" asp-for="EstadoReserva" />
+                    <label class="form-check-label">@Html.DisplayNameFor(model => model.EstadoReserva)</label>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="FechaCreacion" class="form-label">Fecha creacion de reserva:</label>
+                    <input asp-for="FechaCreacion" class="form-control" />
+                    <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="FechaActualizacion" class="form-label">Fecha actualizacion:</label>
+                    <input asp-for="FechaActualizacion" class="form-control" />
+                    <span asp-validation-for="FechaActualizacion" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Novedad" class="form-label">Novedades</label>
+                    <input asp-for="Novedad" class="form-control" />
+                    <span asp-validation-for="Novedad" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <input type="submit" value="Crear" class="btn btn-primary" />
+
+                    <a asp-action="Index" class="btn btn-secondary ml-2">Regresar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
