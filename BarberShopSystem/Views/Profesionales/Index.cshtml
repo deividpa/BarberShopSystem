@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<BarberShopSystem.Models.Profesional>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Profesionales";
 }
-
-<h1>Index</h1>
+@* //New *@
+<h1>Profesionales Activos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Crear nuevo profesional</a>
 </p>
 <table class="table">
     <thead>
@@ -42,11 +42,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.NumeroTelefono)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-info" }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                </td>
+
         </tr>
 }
     </tbody>
