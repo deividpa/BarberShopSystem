@@ -9,11 +9,14 @@ namespace BarberShopSystem.Controllers
     {
         // Inyección de dependencia del servicio de profesionales.
         private readonly ProfesionalesService _profesionalesService;
+        private readonly ServiciosService _serviciosService;
+
 
         // Constructor para inyectar el servicio en el controlador.
-        public ProfesionalesController(ProfesionalesService profesionalesService)
+        public ProfesionalesController(ProfesionalesService profesionalesService, ServiciosService serviciosService)
         {
             _profesionalesService = profesionalesService;
+            _serviciosService = serviciosService;
         }
         // GET: ProfesionalesController
         public ActionResult Index()
@@ -25,13 +28,14 @@ namespace BarberShopSystem.Controllers
 
         // GET: ProfesionalesController/Details/5
         public ActionResult Details(int id)
-        {
+        {    
             return View();
         }
 
         // GET: ProfesionalesController/Create
         public ActionResult Create()
         {
+            ViewBag.Servicios = _serviciosService.ObtenerListaDeServicios();
             return View();
         }
 
@@ -44,10 +48,17 @@ namespace BarberShopSystem.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // Utiliza el servicio para agregar el nuevo profesional
+                    // Asigna los servicios seleccionados al profesional antes de agregarlo
+                    nuevoProfesional.ProfesionalServicios = nuevoProfesional.ServiciosSeleccionados
+                        .Select(servicioId => new ProfesionalServicio { ServicioId = servicioId })
+                        .ToList();
+
                     _profesionalesService.AgregarProfesional(nuevoProfesional);
                     return RedirectToAction(nameof(Index));
                 }
+
+                // Recarga la lista de servicios para la vista
+                ViewBag.Servicios = _serviciosService.ObtenerListaDeServicios();
                 return View(nuevoProfesional);
             }
             catch

@@ -14,6 +14,7 @@ builder.Services.AddControllersWithViews();
 // Se añaden los servicios al contenedor.
 builder.Services.AddScoped<ReservasService>();
 builder.Services.AddScoped<ProfesionalesService>();
+builder.Services.AddScoped<ServiciosService>();
 
 // Se hace inyección de dependencia de la BD
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

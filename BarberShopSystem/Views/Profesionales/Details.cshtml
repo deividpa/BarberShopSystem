@@ -1,40 +1,36 @@
 ﻿@model BarberShopSystem.Models.Profesional
 
 @{
-    ViewData["Title"] = "Detalles Profesional";
+    ViewData["Title"] = "Details";
 }
-@* //New *@
-<div class="container mt-5">
-    <h1 class="text-center">Detalles del Profesional</h1>
+
+<h1>Details</h1>
+
+<div>
+    <h4>Profesional</h4>
     <hr />
-
-    <div>
-        <h4>Profesional</h4>
-        <hr />
-        <dl class="row">
-           
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Nombre)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Nombre)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Correo)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Correo)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.NumeroTelefono)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.NumeroTelefono)
-            </dd>
-        </dl>
-    </div>
-
-    <div class="mt-3">
-        <a asp-action="Index" class="btn btn-secondary ml-2">Regresar</a>
-    </div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Correo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Correo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumeroTelefono)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumeroTelefono)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

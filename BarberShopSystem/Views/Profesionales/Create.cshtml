@@ -30,7 +30,23 @@
                     <input asp-for="NumeroTelefono" class="form-control" />
                     <span asp-validation-for="NumeroTelefono" class="text-danger"></span>
                 </div>
-
+                <div class="mb-3">
+                    <label asp-for="ServiciosSeleccionados" class="form-label">Servicios:</label>
+                    <select asp-for="ServiciosSeleccionados" class="form-control" multiple>
+                        @{
+                            var servicios = ViewBag.Servicios as List<Servicio>;
+                            if (servicios != null)
+                            {
+                                var selectList = new SelectList(servicios, "Id", "Descripcion");
+                                foreach (var item in selectList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="ServiciosSeleccionados" class="text-danger"></span>
+                </div>
                 <div class="mb-3">
                     <input type="submit" value="Crear" class="btn btn-primary" />
 
