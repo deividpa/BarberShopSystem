@@ -1,6 +1,12 @@
+using BarberShopSystem.Models;
 using BarberShopSystem.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -8,6 +14,11 @@ builder.Services.AddControllersWithViews();
 // Se añaden los servicios al contenedor.
 builder.Services.AddScoped<ReservasService>();
 builder.Services.AddScoped<ProfesionalesService>();
+
+// Se hace inyección de dependencia de la BD
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(connectionString, serverVersion)
+);
 
 var app = builder.Build();
 
