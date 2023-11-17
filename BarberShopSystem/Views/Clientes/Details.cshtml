@@ -35,8 +35,14 @@
         @foreach (var reserva in Model.Reservas)
         {
             <li>
-                Fecha: @reserva.Fecha
-                <!-- Otros detalles de la reserva -->
+                <strong>Fecha de Reserva:</strong> @reserva.Fecha<br />
+                <strong>Estado de Reserva:</strong> @((reserva.EstadoReserva) ? "Confirmada" : "Pendiente")<br />
+                <strong>Nombre del Profesional:</strong> @(reserva.Profesional != null ? reserva.Profesional.Nombre : "No asignado")<br />
+                <strong>Fecha de Creación:</strong> @reserva.FechaCreacion<br />
+                <strong>Descripción del Servicio:</strong> @reserva.Servicio?.Descripcion ?? "Sin descripción"<br />
+                <strong>Hora de Inicio:</strong> @reserva.Cupo?.HoraInicio.ToString("HH:mm") ?? "Sin información"<br />
+                <strong>Hora de Fin:</strong> @reserva.Cupo?.HoraFin.ToString("HH:mm") ?? "Sin información"<br />
+                <strong>Novedad:</strong> @(string.IsNullOrEmpty(reserva.Novedad) ? "Sin novedades" : reserva.Novedad)<br />
             </li>
         }
     </ul>
