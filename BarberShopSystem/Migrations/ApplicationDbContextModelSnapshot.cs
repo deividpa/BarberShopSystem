@@ -129,9 +129,6 @@ namespace BarberShopSystem.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("HoraCreacion")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("Novedad")
                         .HasColumnType("longtext");
 
