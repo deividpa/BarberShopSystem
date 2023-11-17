@@ -10,7 +10,7 @@ namespace BarberShopSystem.Models
         }
 
         public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Cupo> Cupos { get; set; }
+        /*public DbSet<Cupo> Cupos { get; set; }*/
         public DbSet<Profesional> Profesionales { get; set; }
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<ProfesionalServicio> ProfesionalServicios { get; set; }
@@ -39,12 +39,12 @@ namespace BarberShopSystem.Models
                 .HasOne(r => r.Cliente)
                 .WithMany(c => c.Reservas)
                 .HasForeignKey(r => r.ClienteId);
-
+            /*
             modelBuilder.Entity<Reserva>()
                 .HasOne(r => r.Cupo)
                 .WithOne(c => c.Reserva)
                 .HasForeignKey<Reserva>(r => r.CupoId);
-
+            */
             modelBuilder.Entity<Reserva>()
                 .HasOne(r => r.Servicio)
                 .WithMany()
@@ -55,12 +55,12 @@ namespace BarberShopSystem.Models
                 .WithMany(p => p.Reservas)
                 .HasForeignKey(r => r.ProfesionalId);
 
-            // Relaciones para Profesional
+            /* Relaciones para Profesional
             modelBuilder.Entity<Profesional>()
-                .HasMany(p => p.Cupos)
+                //.HasMany(p => p.Cupos)
                 .WithOne(c => c.Profesional)
                 .HasForeignKey(c => c.ProfesionalId);
-
+            */
             modelBuilder.Entity<Profesional>()
                 .HasMany(p => p.ProfesionalServicios)
                 .WithOne(ps => ps.Profesional)
