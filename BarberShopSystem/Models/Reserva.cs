@@ -25,7 +25,6 @@ namespace BarberShopSystem.Models
         // Otros campos
         public bool EstadoReserva { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public DateTime HoraCreacion { get; set; }
         public DateTime FechaActualizacion { get; set; }
         public string? Novedad { get; set; }
     }
