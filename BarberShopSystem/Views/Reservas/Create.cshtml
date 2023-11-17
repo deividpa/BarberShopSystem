@@ -19,28 +19,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProfesionalId" class="control-label"></label>
-                <select asp-for="ProfesionalId" class ="form-control" asp-items="ViewBag.ProfesionalId"></select>
-            </div>   
-            <!--
-            <div class="form-group">
-                <label asp-for="ProfesionalId" class="control-label"></label>
-
-                @if (ViewBag.Profesionales != null && ViewBag.Profesionales.Any())
-                {
-                    <select asp-for="ProfesionalId" class="form-control" id="profesionalDropdown">
-                        <option value="">Selecciona un profesional</option>
-                        @foreach (var profesional in ViewBag.Profesionales)
-                        {
-                            <option value="@profesional.Value">@profesional.Text</option>
-                        }
-                    </select>
-                }
-                else
-                {
-                    <p>No hay profesionales disponibles.</p>
-                }
-            </div>
-            -->
+                <select asp-for="ProfesionalId" class="form-control" asp-items="ViewBag.ProfesionalId" id="profesionalDropdown"></select>
+            </div> 
             <!--
             <div class="form-group">
                 <label asp-for="CupoId" class="control-label"></label>
@@ -56,29 +36,46 @@
             @section Scripts {
                 <script>
                     $(document).ready(function () {
+                        console.log("Documento listo. Se ejecutará el código.");
                         // Se maneja el cambio en el dropdown de profesionales
                         $("#profesionalDropdown").change(function () {
                             var profesionalId = $(this).val();
-                            var fecha = new Date(); // Puedes ajustar la lógica para seleccionar la fecha deseada
+                            var fecha = new Date();
 
-                            // Se realiza una llamada AJAX para obtener los cupos disponibles
+                            // Se realiza una llamada AJAX para obtener los intervalos disponibles
                             $.ajax({
                                 url: "/Reservas/ObtenerCuposDisponibles",
                                 type: "GET",
                                 data: { profesionalId: profesionalId, fecha: fecha },
-                                success: function (cupos) {
+                                success: function (intervalos) {
+                                    if (!intervalos || intervalos.length === 0) {
+                                        console.log("No se recibieron intervalos válidos.");
+                                        return;
+                                    }
                                     // Se limpia y actualiza el dropdown de cupos
+                                    console.log("Intervalos recibidos:", intervalos);
                                     $("#cupoDropdown").empty();
                                     $("#cupoDropdown").append('<option value="">Selecciona un cupo</option>');
 
-                                    $.each(cupos, function (index, cupo) {
-                                        $("#cupoDropdown").append('<option value="' + cupo.Id + '">' + cupo.HoraInicio + ' - ' + cupo.HoraFin + '</option>');
+                                    $.each(intervalos, function (index, intervalo) {
+                                        $("#cupoDropdown").append('<option value="' + intervalo + '">' + intervalo + '</option>');
                                     });
                                 },
                                 error: function () {
-                                    console.log("Error al obtener los cupos disponibles.");
+                                    console.log("Error al obtener los intervalos disponibles.");
                                 }
                             });
+                        });
+
+                        // Manejar el cambio en el dropdown de cupos
+                        $("#cupoDropdown").change(function () {
+                            var intervaloSeleccionado = $(this).val();
+
+                            // Si el usuario selecciona un intervalo, se crea un nuevo cupo
+                            if (intervaloSeleccionado) {
+                                // Puedes realizar una llamada AJAX adicional para crear el nuevo cupo
+                                console.log("Crear nuevo cupo con intervalo:", intervaloSeleccionado);
+                            }
                         });
                     });
                 </script>
@@ -90,11 +87,6 @@
             <div class="form-group">
                 <label asp-for="ClienteId" class="control-label"></label>
                 <select asp-for="ClienteId" class ="form-control" asp-items="ViewBag.ClienteId"></select>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="EstadoReserva" /> @Html.DisplayNameFor(model => model.EstadoReserva)
-                </label>
             </div>
             <div class="form-group">
                 <label asp-for="Novedad" class="control-label"></label>
