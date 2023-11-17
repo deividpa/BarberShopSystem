@@ -48,6 +48,9 @@ namespace BarberShopSystem.Migrations
                     b.Property<bool>("EstadoCupo")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("HoraFin")
                         .HasColumnType("datetime(6)");
 
