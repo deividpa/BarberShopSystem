@@ -1,72 +1,79 @@
 ﻿@model BarberShopSystem.Models.Reserva
 
 @{
-    ViewData["Title"] = "Editar Reserva";
+    ViewData["Title"] = "Edit";
 }
-@* //New *@
-<h1 class="text-center">Editar Reserva</h1>
 
+<h1>Edit</h1>
+
+<h4>Reserva</h4>
 <hr />
-
-<div class="row justify-content-center">
-    <div class="col-md-8">
+<div class="row">
+    <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">ID</label>
-                <div class="col-sm-8">
-                    <input asp-for="Id" class="form-control" />
-                    <span asp-validation-for="Id" class="text-danger"></span>
-                </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" class="form-control" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Fecha</label>
-                <div class="col-sm-8">
-                    <input asp-for="Fecha" class="form-control" />
-                    <span asp-validation-for="Fecha" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="ProfesionalId" class="control-label"></label>
+                <select asp-for="ProfesionalId" class="form-control" asp-items="ViewBag.ProfesionalId"></select>
+                <span asp-validation-for="ProfesionalId" class="text-danger"></span>
             </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">ID del Profesional</label>
-                <div class="col-sm-8">
-                    <input asp-for="ProfesionalId" class="form-control" />
-                    <span asp-validation-for="ProfesionalId" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="CupoId" class="control-label"></label>
+                <select asp-for="CupoId" class="form-control" asp-items="ViewBag.CupoId"></select>
+                <span asp-validation-for="CupoId" class="text-danger"></span>
             </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">ID del Cupo</label>
-                <div class="col-sm-8">
-                    <input asp-for="CupoId" class="form-control" />
-                    <span asp-validation-for="CupoId" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="ServicioId" class="control-label"></label>
+                <select asp-for="ServicioId" class="form-control" asp-items="ViewBag.ServicioId"></select>
+                <span asp-validation-for="ServicioId" class="text-danger"></span>
             </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">ID del Servicio</label>
-                <div class="col-sm-8">
-                    <input asp-for="ServicioId" class="form-control" />
-                    <span asp-validation-for="ServicioId" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="ClienteId" class="control-label"></label>
+                <select asp-for="ClienteId" class="form-control" asp-items="ViewBag.ClienteId"></select>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
             </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">ID del Cliente</label>
-                <div class="col-sm-8">
-                    <input asp-for="ClienteId" class="form-control" />
-                    <span asp-validation-for="ClienteId" class="text-danger"></span>
-                </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="EstadoReserva" /> @Html.DisplayNameFor(model => model.EstadoReserva)
+                </label>
             </div>
-
-            <div class="form-group row">
-                <div class="col-sm-8 offset-sm-4">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-                </div>
+            <div class="form-group">
+                <label asp-for="FechaCreacion" class="control-label"></label>
+                <input asp-for="FechaCreacion" class="form-control" />
+                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HoraCreacion" class="control-label"></label>
+                <input asp-for="HoraCreacion" class="form-control" />
+                <span asp-validation-for="HoraCreacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaActualizacion" class="control-label"></label>
+                <input asp-for="FechaActualizacion" class="form-control" />
+                <span asp-validation-for="FechaActualizacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Novedad" class="control-label"></label>
+                <input asp-for="Novedad" class="form-control" />
+                <span asp-validation-for="Novedad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

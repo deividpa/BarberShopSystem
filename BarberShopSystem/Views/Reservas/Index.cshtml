@@ -1,34 +1,31 @@
 ﻿@model IEnumerable<BarberShopSystem.Models.Reserva>
 
 @{
-    ViewData["Title"] = "Reservas";
+    ViewData["Title"] = "Index";
 }
-@* //New *@
-<h1>Reservas Agendadas</h1>
+
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Crear nueva reserva</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Fecha)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProfesionalId)
+                @Html.DisplayNameFor(model => model.Profesional)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CupoId)
+                @Html.DisplayNameFor(model => model.Cupo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ServicioId)
+                @Html.DisplayNameFor(model => model.Servicio)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClienteId)
+                @Html.DisplayNameFor(model => model.Cliente)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EstadoReserva)
@@ -52,22 +49,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Fecha)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProfesionalId)
+                @Html.DisplayFor(modelItem => item.Profesional.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CupoId)
+                @Html.DisplayFor(modelItem => item.Cupo.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ServicioId)
+                @Html.DisplayFor(modelItem => item.Servicio.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ClienteId)
+                @Html.DisplayFor(modelItem => item.Cliente.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EstadoReserva)
@@ -85,9 +79,9 @@
                 @Html.DisplayFor(modelItem => item.Novedad)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
