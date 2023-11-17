@@ -62,14 +62,17 @@ namespace BarberShopSystem.Controllers
         // POST: Reservas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Fecha,ProfesionalId,CupoId,ServicioId,ClienteId,EstadoReserva,FechaCreacion,FechaActualizacion,Novedad")] Reserva reserva)
+        public async Task<IActionResult> Create([Bind("Id,Fecha,ProfesionalId,CupoId,ServicioId,ClienteId,EstadoReserva,Novedad")] Reserva reserva)
         {
             if (ModelState.IsValid)
             {
+                // Se establece la fecha de creación
+                reserva.FechaCreacion = DateTime.Now;
+
                 _context.Add(reserva);
                 await _context.SaveChangesAsync();
 
-                // Actualizar el estado del cupo seleccionado
+                // Se actualiza el estado del cupo seleccionado
                 var cupoSeleccionado = _context.Cupos.FirstOrDefault(c => c.Id == reserva.CupoId);
 
                 if (cupoSeleccionado != null)
@@ -111,7 +114,7 @@ namespace BarberShopSystem.Controllers
         // POST: Reservas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Fecha,ProfesionalId,CupoId,ServicioId,ClienteId,EstadoReserva,FechaCreacion,FechaActualizacion,Novedad")] Reserva reserva)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Fecha,ProfesionalId,CupoId,ServicioId,ClienteId,EstadoReserva,Novedad")] Reserva reserva)
         {
             if (id != reserva.Id)
             {
@@ -122,6 +125,9 @@ namespace BarberShopSystem.Controllers
             {
                 try
                 {
+                    // Se establece la fecha de actualización
+                    reserva.FechaActualizacion = DateTime.Now; 
+                    
                     _context.Update(reserva);
                     await _context.SaveChangesAsync();
                 }
@@ -195,6 +201,51 @@ namespace BarberShopSystem.Controllers
         private SelectList ObtenerListaDeProfesionales()
         {
             return new SelectList(_context.Profesionales, "Id", "Nombre");
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerCuposDisponibles(int profesionalId, DateTime fecha)
+        {
+            var fechaSinHora = fecha.Date; // Eliminar la información de la hora
+
+            // Verificar si hay algún cupo existente para la fecha proporcionada
+            var existeCupo = _context.Cupos
+                .Any(c => c.ProfesionalId == profesionalId && c.Fecha.Date == fechaSinHora && c.EstadoCupo);
+
+            List<string> intervalosDisponibles;
+
+            if (existeCupo)
+            {
+                // Obtener los intervalos de 30 minutos disponibles basados en los cupos existentes
+                intervalosDisponibles = ObtenerIntervalosDisponibles(profesionalId, fechaSinHora);
+            }
+            else
+            {
+                // Si no hay cupos existentes, mostrar todos los intervalos del día
+                intervalosDisponibles = ObtenerTodosLosIntervalosDelDia();
+            }
+
+            return Json(intervalosDisponibles);
+        }
+
+        // Función para obtener intervalos disponibles basados en los cupos existentes
+        private List<string> ObtenerIntervalosDisponibles(int profesionalId, DateTime fecha)
+        {
+            // Lógica para obtener intervalos disponibles
+            // ...
+
+            // En este ejemplo, se devuelve una lista de intervalos fijos para la demostración
+            return new List<string> { "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm" };
+        }
+
+        // Función para obtener todos los intervalos del día (para fechas sin cupos existentes)
+        private List<string> ObtenerTodosLosIntervalosDelDia()
+        {
+            // Lógica para obtener todos los intervalos del día
+            // ...
+
+            // En este ejemplo, se devuelve una lista de intervalos fijos para la demostración
+            return new List<string> { "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm", "12:30 pm", "1:00 pm", "1:30 pm", "2:00 pm", "2:30 pm", "3:00 pm", "3:30 pm", "4:00 pm", "4:30 pm" };
         }
     }
 }
