@@ -1,112 +1,158 @@
-﻿using BarberShopSystem.Models;
-using BarberShopSystem.Services;
-using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using BarberShopSystem.Models;
 
 namespace BarberShopSystem.Controllers
 {
     public class ProfesionalesController : Controller
     {
-        // Inyección de dependencia del servicio de profesionales.
-        private readonly ProfesionalesService _profesionalesService;
-        private readonly ServiciosService _serviciosService;
+        private readonly ApplicationDbContext _context;
 
-
-        // Constructor para inyectar el servicio en el controlador.
-        public ProfesionalesController(ProfesionalesService profesionalesService, ServiciosService serviciosService)
+        public ProfesionalesController(ApplicationDbContext context)
         {
-            _profesionalesService = profesionalesService;
-            _serviciosService = serviciosService;
-        }
-        // GET: ProfesionalesController
-        public ActionResult Index()
-        {
-            // Se utiliza el servicio para obtener la lista de profesionales.
-            List<Profesional> profesionales = _profesionalesService.ObtenerListaDeProfesionales();
-            return View(profesionales);
+            _context = context;
         }
 
-        // GET: ProfesionalesController/Details/5
-        public ActionResult Details(int id)
-        {    
+        // GET: Profesionales
+        public async Task<IActionResult> Index()
+        {
+              return _context.Profesionales != null ? 
+                          View(await _context.Profesionales.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Profesionales'  is null.");
+        }
+
+        // GET: Profesionales/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Profesionales == null)
+            {
+                return NotFound();
+            }
+
+            var profesional = await _context.Profesionales
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (profesional == null)
+            {
+                return NotFound();
+            }
+
+            return View(profesional);
+        }
+
+        // GET: Profesionales/Create
+        public IActionResult Create()
+        {
             return View();
         }
 
-        // GET: ProfesionalesController/Create
-        public ActionResult Create()
-        {
-            ViewBag.Servicios = _serviciosService.ObtenerListaDeServicios();
-            return View();
-        }
-
-        // POST: ProfesionalesController/Create
+        // POST: Profesionales/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Profesional nuevoProfesional)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Correo,NumeroTelefono")] Profesional profesional)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                _context.Add(profesional);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(profesional);
+        }
+
+        // GET: Profesionales/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Profesionales == null)
+            {
+                return NotFound();
+            }
+
+            var profesional = await _context.Profesionales.FindAsync(id);
+            if (profesional == null)
+            {
+                return NotFound();
+            }
+            return View(profesional);
+        }
+
+        // POST: Profesionales/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Correo,NumeroTelefono")] Profesional profesional)
+        {
+            if (id != profesional.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
                 {
-                    // Asigna los servicios seleccionados al profesional antes de agregarlo
-                    nuevoProfesional.ProfesionalServicios = nuevoProfesional.ServiciosSeleccionados
-                        .Select(servicioId => new ProfesionalServicio { ServicioId = servicioId })
-                        .ToList();
-
-                    _profesionalesService.AgregarProfesional(nuevoProfesional);
-                    return RedirectToAction(nameof(Index));
+                    _context.Update(profesional);
+                    await _context.SaveChangesAsync();
                 }
-
-                // Recarga la lista de servicios para la vista
-                ViewBag.Servicios = _serviciosService.ObtenerListaDeServicios();
-                return View(nuevoProfesional);
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProfesionalesController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ProfesionalesController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProfesionalExists(profesional.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(profesional);
         }
 
-        // GET: ProfesionalesController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: Profesionales/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null || _context.Profesionales == null)
+            {
+                return NotFound();
+            }
+
+            var profesional = await _context.Profesionales
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (profesional == null)
+            {
+                return NotFound();
+            }
+
+            return View(profesional);
         }
 
-        // POST: ProfesionalesController/Delete/5
-        [HttpPost]
+        // POST: Profesionales/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
+            if (_context.Profesionales == null)
             {
-                return RedirectToAction(nameof(Index));
+                return Problem("Entity set 'ApplicationDbContext.Profesionales'  is null.");
             }
-            catch
+            var profesional = await _context.Profesionales.FindAsync(id);
+            if (profesional != null)
             {
-                return View();
+                _context.Profesionales.Remove(profesional);
             }
+            
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool ProfesionalExists(int id)
+        {
+          return (_context.Profesionales?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
