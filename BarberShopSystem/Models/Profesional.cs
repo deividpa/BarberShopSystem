@@ -17,7 +17,7 @@ namespace BarberShopSystem.Models
 
         // Relación con otras tablas
         public List<Reserva>? Reservas { get; set; }
-        public List<Cupo>? Cupos { get; set; }
+        /*public List<Cupo>? Cupos { get; set; }*/
         public List<ProfesionalServicio>? ProfesionalServicios { get; set; }
 
         [Display(Name = "Servicios")]
