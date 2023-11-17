@@ -9,6 +9,7 @@ using BarberShopSystem.Models;
 
 namespace BarberShopSystem.Controllers
 {
+    /*SOLID: Principio de resposabilidad única**/
     public class ReservasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,7 +22,7 @@ namespace BarberShopSystem.Controllers
         // GET: Reservas
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Reservas.Include(r => r.Cliente).Include(r => r.Cupo).Include(r => r.Profesional).Include(r => r.Servicio);
+            var applicationDbContext = _context.Reservas.Include(r => r.Cliente)/*.Include(r => r.Cupo)*/.Include(r => r.Profesional).Include(r => r.Servicio);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +36,7 @@ namespace BarberShopSystem.Controllers
 
             var reserva = await _context.Reservas
                 .Include(r => r.Cliente)
-                .Include(r => r.Cupo)
+                // .Include(r => r.Cupo)
                 .Include(r => r.Profesional)
                 .Include(r => r.Servicio)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -72,14 +73,24 @@ namespace BarberShopSystem.Controllers
                 _context.Add(reserva);
                 await _context.SaveChangesAsync();
 
+                // TODO: Corregir Lógica de Cupos 
                 // Se actualiza el estado del cupo seleccionado
-                var cupoSeleccionado = _context.Cupos.FirstOrDefault(c => c.Id == reserva.CupoId);
-
+                // var cupoSeleccionado = _context.Cupos.FirstOrDefault(c => c.Id == reserva.CupoId);
+                /*
                 if (cupoSeleccionado != null)
                 {
                     cupoSeleccionado.EstadoCupo = false;
                     await _context.SaveChangesAsync();
                 }
+                else
+                {
+                    // Manejo de error si no se encuentra el cupo
+                    ModelState.AddModelError("CupoId", "El cupo seleccionado no es válido.");
+                    ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nombre", reserva.ClienteId);
+                    ViewData["ServicioId"] = new SelectList(_context.Servicios, "Id", "Descripcion", reserva.ServicioId);
+                    ViewData["ProfesionalId"] = ObtenerListaDeProfesionales();
+                    return View(reserva);
+                }*/
 
                 return RedirectToAction(nameof(Index));
             }
@@ -104,17 +115,17 @@ namespace BarberShopSystem.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Id", reserva.ClienteId);
-            ViewData["CupoId"] = new SelectList(_context.Cupos, "Id", "Id", reserva.CupoId);
-            ViewData["ProfesionalId"] = new SelectList(_context.Profesionales, "Id", "Id", reserva.ProfesionalId);
-            ViewData["ServicioId"] = new SelectList(_context.Servicios, "Id", "Id", reserva.ServicioId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nombre", reserva.ClienteId);
+            //ViewData["CupoId"] = new SelectList(_context.Cupos, "Id", "Id", reserva.CupoId);
+            ViewData["ProfesionalId"] = new SelectList(_context.Profesionales, "Id", "Nombre", reserva.ProfesionalId);
+            ViewData["ServicioId"] = new SelectList(_context.Servicios, "Id", "Descripcion", reserva.ServicioId);
             return View(reserva);
         }
 
         // POST: Reservas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Fecha,ProfesionalId,CupoId,ServicioId,ClienteId,EstadoReserva,Novedad")] Reserva reserva)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Fecha,ProfesionalId,ServicioId,ClienteId,EstadoReserva,Novedad")] Reserva reserva)
         {
             if (id != reserva.Id)
             {
@@ -125,10 +136,27 @@ namespace BarberShopSystem.Controllers
             {
                 try
                 {
+                    // Obtener la reserva existente del contexto
+                    var reservaExistente = await _context.Reservas.FindAsync(reserva.Id);
+
+                    if (reservaExistente == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Copiar las propiedades modificadas de la nueva reserva a la reserva existente
+                    _context.Entry(reservaExistente).CurrentValues.SetValues(reserva);
+
+                    // No actualices la propiedad FechaCreacion
+                    reservaExistente.FechaCreacion = reserva.FechaCreacion;
+
                     // Se establece la fecha de actualización
-                    reserva.FechaActualizacion = DateTime.Now; 
-                    
-                    _context.Update(reserva);
+                    reservaExistente.FechaActualizacion = DateTime.Now;
+
+                    // Actualizar la entidad existente en el contexto
+                    _context.Update(reservaExistente);
+
+                    // Guardar cambios en la base de datos
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -144,10 +172,12 @@ namespace BarberShopSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Id", reserva.ClienteId);
-            ViewData["CupoId"] = new SelectList(_context.Cupos, "Id", "Id", reserva.CupoId);
-            ViewData["ProfesionalId"] = new SelectList(_context.Profesionales, "Id", "Id", reserva.ProfesionalId);
-            ViewData["ServicioId"] = new SelectList(_context.Servicios, "Id", "Id", reserva.ServicioId);
+
+            // Cargar datos necesarios para Cliente, Profesional y Servicio
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nombre", reserva.ClienteId);
+            ViewData["ProfesionalId"] = new SelectList(_context.Profesionales, "Id", "Nombre", reserva.ProfesionalId);
+            ViewData["ServicioId"] = new SelectList(_context.Servicios, "Id", "Descripcion", reserva.ServicioId);
+
             return View(reserva);
         }
 
@@ -161,7 +191,7 @@ namespace BarberShopSystem.Controllers
 
             var reserva = await _context.Reservas
                 .Include(r => r.Cliente)
-                .Include(r => r.Cupo)
+                // .Include(r => r.Cupo)
                 .Include(r => r.Profesional)
                 .Include(r => r.Servicio)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -202,7 +232,7 @@ namespace BarberShopSystem.Controllers
         {
             return new SelectList(_context.Profesionales, "Id", "Nombre");
         }
-
+        /*
         [HttpGet]
         public JsonResult ObtenerCuposDisponibles(int profesionalId, DateTime fecha)
         {
@@ -226,9 +256,10 @@ namespace BarberShopSystem.Controllers
             }
 
             return Json(intervalosDisponibles);
-        }
+        } */
 
         // Función para obtener intervalos disponibles basados en los cupos existentes
+        /*
         private List<string> ObtenerIntervalosDisponibles(int profesionalId, DateTime fecha)
         {
             // Lógica para obtener intervalos disponibles
@@ -246,6 +277,6 @@ namespace BarberShopSystem.Controllers
 
             // En este ejemplo, se devuelve una lista de intervalos fijos para la demostración
             return new List<string> { "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm", "12:30 pm", "1:00 pm", "1:30 pm", "2:00 pm", "2:30 pm", "3:00 pm", "3:30 pm", "4:00 pm", "4:30 pm" };
-        }
+        }*/
     }
 }
