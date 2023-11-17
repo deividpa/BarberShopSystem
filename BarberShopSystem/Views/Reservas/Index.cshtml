@@ -19,9 +19,6 @@
                 @Html.DisplayNameFor(model => model.Profesional)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cupo)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Servicio)
             </th>
             <th>
@@ -49,16 +46,13 @@
                 @Html.DisplayFor(modelItem => item.Fecha)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Profesional.Id)
+                @Html.DisplayFor(modelItem => item.Profesional.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cupo.Id)
+                @Html.DisplayFor(modelItem => item.Servicio.Descripcion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Servicio.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cliente.Id)
+                @Html.DisplayFor(modelItem => item.Cliente.Nombre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EstadoReserva)
